@@ -1,0 +1,13 @@
+{
+  "manifest_version": 2,
+  "name": "Anticookie",
+  "version": "1.0",
+  "description": "Blocks cookie requests from banking websites",
+  "permissions": ["webRequest", "webRequestBlocking", "<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
