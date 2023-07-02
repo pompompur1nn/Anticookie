@@ -1,5 +1,7 @@
 // Define the list of banking website domains (40 banks)
 const bankingWebsites = [
+ // Define the list of banking website domains (40 banks)
+const bankingWebsites = [
   "bankofamerica.com",
   "jpmorganchase.com",
   "wellsfargo.com",
@@ -40,7 +42,8 @@ const bankingWebsites = [
   "bankofchina.com",
   "hdfcbank.com",
   "sbi.co.in",
-  "bancopopular.es"
+  "bancopopular.es",
+  // Add more banking websites here
 ];
 
 // Define the list of major game website domains (40 games)
@@ -85,20 +88,12 @@ const gameWebsites = [
   "ncsoft.com",
   "daybreakgames.com",
   "ubi.com",
-  "pearlabyss.com"
-];
-
-// Define the list of other sensitive website domains
-const sensitiveWebsites = [
-  "apple.com",
-  "uber.com",
-  "microsoft.com",
-  "openai.com"
-  // Add more sensitive websites here
+  "pearlabyss.com",
+  // Add more game websites here
 ];
 
 // Combine all the domains into a single array
-const allowedWebsites = [...bankingWebsites, ...gameWebsites, ...sensitiveWebsites];
+const allowedWebsites = [...bankingWebsites, ...gameWebsites];
 
 // Listen to web requests
 browser.webRequest.onBeforeSendHeaders.addListener(
@@ -108,4 +103,12 @@ browser.webRequest.onBeforeSendHeaders.addListener(
 
     // Check if the requested domain is in the allowed websites list
     if (allowedWebsites.includes(requestedDomain)) {
-      // Find and remove
+      // Find and remove any cookies from the request headers
+      const headers = details.requestHeaders.filter(header => header.name.toLowerCase
+                                                    () !== "cookie");
+      return { requestHeaders: headers };
+    }
+  },
+  { urls: ["<all_urls>"] },
+  ["blocking", "requestHeaders"]
+);
