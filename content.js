@@ -88,19 +88,24 @@ const gameWebsites = [
   "pearlabyss.com"
 ];
 
+// Define the list of other sensitive website domains
+const sensitiveWebsites = [
+  "apple.com",
+  "uber.com",
+  "microsoft.com",
+  "openai.com"
+  // Add more sensitive websites here
+];
+
+// Combine all the domains into a single array
+const allowedWebsites = [...bankingWebsites, ...gameWebsites, ...sensitiveWebsites];
+
 // Listen to web requests
 browser.webRequest.onBeforeSendHeaders.addListener(
   function(details) {
     // Get the requested domain from the URL
     const requestedDomain = new URL(details.url).hostname;
 
-    // Check if the requested domain is in the banking websites list or game websites list
-    if (bankingWebsites.includes(requestedDomain) || gameWebsites.includes(requestedDomain)) {
-      // Find and remove any cookies from the request headers
-      const headers = details.requestHeaders.filter(header => header.name.toLowerCase() !== "cookie");
-      return { requestHeaders: headers };
-    }
-  },
-  { urls: ["<all_urls>"] },
-  ["blocking", "requestHeaders"]
-);
+    // Check if the requested domain is in the allowed websites list
+    if (allowedWebsites.includes(requestedDomain)) {
+      // Find and remove
